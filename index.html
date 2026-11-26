@@ -200,14 +200,14 @@
   @media (max-width:600px){.sectors{grid-template-columns:1fr}}
 
   /* ---------- Stats ---------- */
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;margin-top:80px}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:80px}
   .stat{border-left:1px solid var(--line);padding-left:24px}
   .stat .v{font-size:clamp(2.6rem,4.6vw,4.4rem);font-weight:900;font-stretch:112%;letter-spacing:-.03em}
   .stat .k{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--lav);margin-top:10px;text-transform:uppercase;opacity:.8;line-height:1.6}
   .stat-text .v{display:flex;flex-direction:column;font-size:clamp(1.25rem,1.9vw,1.85rem);line-height:1.12;letter-spacing:-.01em;text-transform:uppercase}
   .stat-text .v span:nth-child(2){color:var(--orange)}
   .stat-text .v span:nth-child(3){color:transparent;-webkit-text-stroke:1px #fff}
-  @media (max-width:900px){.stats{grid-template-columns:1fr 1fr}}
+  @media (max-width:900px){.stats{grid-template-columns:1fr 1fr}.stat-text{grid-column:1/-1}}
 
   .final{text-align:center;padding:200px 5vw 180px}
   .final h2{margin:0 auto;font-size:clamp(3rem,8.4vw,9.4rem)}
@@ -427,7 +427,7 @@
   <section class="block" id="sectors">
     <div class="label reveal">03 — Sectors</div>
     <h2 class="reveal">Built for environments <span class="dim">where failure</span> isn't an option.</h2>
-    <p class="lede reveal">32 projects across 16 countries since 2020, from Tier-1 banks and telecom operators to aerospace, defense and energy. Here's where our platforms run.</p>
+    <p class="lede reveal">32 projects across 16 countries, from Tier-1 banks and telecom operators to aerospace, defense and energy. Here's where our platforms run.</p>
 
     <div class="sectors">
       <!-- Finance -->
@@ -545,7 +545,6 @@
     <div class="stats">
       <div class="stat reveal"><div class="v"><span data-count="32">0</span></div><div class="k">Projects delivered</div></div>
       <div class="stat reveal"><div class="v"><span data-count="16">0</span></div><div class="k">Countries across EMEA &amp; US</div></div>
-      <div class="stat reveal"><div class="v"><span data-count="7">0</span></div><div class="k">Years in the field<br/>2020 — 2026</div></div>
       <div class="stat stat-text reveal"><div class="v"><span>Cloud native</span><span>Cloud ready</span><span>Cloud agnostic</span></div><div class="k">AWS · Azure · On-prem · Hybrid</div></div>
     </div>
   </section>
@@ -569,12 +568,15 @@
   <div>STATUS: <span style="color:var(--orange)">● ALL SYSTEMS NOMINAL</span></div>
 </footer>
 
-<script type="importmap">
-  { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
-</script>
 
 <script type="module">
-import * as THREE from 'three';
+let THREE;
+try {
+  THREE = await import('./three.module.js');            // copy in your repo
+} catch (e) {
+  console.warn('Local three.js missing, using CDN', e);
+  THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
+}
 
 /* =========================================================
    RENDERER / SCENE
