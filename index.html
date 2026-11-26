@@ -917,12 +917,14 @@ addEventListener('click', () => { pulse = 1; });
 
 let baseX = 2.7, baseScale = 0.9;
 function layout() {
-  const mobile = innerWidth < 900;
-  baseX = mobile ? 0 : 2.7 * Math.min(1, (innerWidth / innerHeight) / 1.6);
+  const w = innerWidth, h = innerHeight;
+  if (!w || !h) return;               // window not sized yet: wait for resize
+  const mobile = w < 900;
+  baseX = mobile ? 0 : 2.7 * Math.min(1, (w / h) / 1.6);
   baseScale = mobile ? 0.72 : 0.9;
-  camera.aspect = innerWidth / innerHeight;
+  camera.aspect = w / h;
   camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight);
+  renderer.setSize(w, h);
 }
 layout();
 addEventListener('resize', layout);
@@ -959,8 +961,8 @@ function tick() {
   const ex = tmp.x, ey = tmp.y;
   const dx = mouse.x - ex, dy = mouse.y - ey;
 
-  const yaw = THREE.MathUtils.clamp(dx * 0.6, -0.65, 0.65);
-  const pitch = THREE.MathUtils.clamp(-dy * 0.5, -0.5, 0.5);
+  const yaw = THREE.MathUtils.clamp(dx * 0.6, -0.65, 0.65) || 0;
+  const pitch = THREE.MathUtils.clamp(-dy * 0.5, -0.5, 0.5) || 0;
   eyeball.rotation.y += (yaw - eyeball.rotation.y) * 0.08;
   eyeball.rotation.x += (pitch - eyeball.rotation.x) * 0.08;
   housing.rotation.y += (yaw * 0.28 - housing.rotation.y) * 0.05;
