@@ -38,19 +38,6 @@
     background:repeating-linear-gradient(to bottom,#fff 0 1px,transparent 1px 3px)}
   main,nav,footer{position:relative;z-index:2}
 
-  /* ---------- Reticle ---------- */
-  .reticle{position:fixed;left:0;top:0;width:38px;height:38px;margin:-19px 0 0 -19px;z-index:50;pointer-events:none;
-    border:1px solid rgba(247,147,30,.7);border-radius:50%;transition:width .25s,height .25s,margin .25s,border-color .25s}
-  .reticle::before,.reticle::after{content:"";position:absolute;background:var(--orange)}
-  .reticle::before{left:50%;top:-6px;bottom:-6px;width:1px;transform:translateX(-50%);
-    mask:linear-gradient(to bottom,#000 0 6px,transparent 6px calc(100% - 6px),#000 calc(100% - 6px));
-    -webkit-mask:linear-gradient(to bottom,#000 0 6px,transparent 6px calc(100% - 6px),#000 calc(100% - 6px))}
-  .reticle::after{top:50%;left:-6px;right:-6px;height:1px;transform:translateY(-50%);
-    mask:linear-gradient(to right,#000 0 6px,transparent 6px calc(100% - 6px),#000 calc(100% - 6px));
-    -webkit-mask:linear-gradient(to right,#000 0 6px,transparent 6px calc(100% - 6px),#000 calc(100% - 6px))}
-  .reticle.hot{width:64px;height:64px;margin:-32px 0 0 -32px;border-color:var(--red)}
-  @media (hover:none){.reticle{display:none}}
-
   /* ---------- Nav ---------- */
   nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;
     padding:22px 5vw;z-index:20;transition:background .4s,backdrop-filter .4s,padding .4s}
@@ -229,7 +216,6 @@
 <canvas id="eye"></canvas>
 <div class="grain"></div>
 <div class="scanlines"></div>
-<div class="reticle" id="reticle"></div>
 
 <!-- Logo as reusable SVG symbol -->
 <svg width="0" height="0" style="position:absolute">
@@ -1101,22 +1087,6 @@ function spawnPanel() {
 }
 setTimeout(spawnPanel, 900);
 setInterval(() => { if (scrollY < innerHeight * 0.8) spawnPanel(); }, 1700);
-
-/* =========================================================
-   RETICLE CURSOR
-========================================================= */
-const ret = document.getElementById('reticle');
-let rx = innerWidth / 2, ry = innerHeight / 2, rtx = rx, rty = ry;
-addEventListener('pointermove', e => { rtx = e.clientX; rty = e.clientY; });
-(function moveRet() {
-  rx += (rtx - rx) * 0.2; ry += (rty - ry) * 0.2;
-  ret.style.transform = `translate(${rx}px, ${ry}px)`;
-  requestAnimationFrame(moveRet);
-})();
-document.querySelectorAll('a, .svc, .sector, .row').forEach(el => {
-  el.addEventListener('mouseenter', () => ret.classList.add('hot'));
-  el.addEventListener('mouseleave', () => ret.classList.remove('hot'));
-});
 
 /* =========================================================
    SCROLL REVEALS + COUNTERS
